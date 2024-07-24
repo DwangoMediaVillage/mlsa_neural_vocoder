@@ -1,0 +1,93 @@
+preprocess:
+  path:
+    data_path: "../wav"
+    preprocessed_path: "./preprocessed_data/JVS100_WAV_24K"
+  val_size: 200
+  audio:
+    sampling_rate: 24000
+    max_wav_value: 32768.0
+    trim_top_db: 20
+  stft:
+    filter_length: 1024
+    hop_length: 256
+    win_length: 1024
+  mel:
+    n_mel_channels: 80
+    n_mel_channels_loss: 80
+    mel_fmin: 0
+    mel_fmax: 8000
+    mel_fmax_loss: null
+  mcep_and_apdc:
+    mcep_channels: 49
+    apdc_channels: 24
+
+model:
+  hidden: 128
+  prenet_cond_channels: 32
+  mlsadf:
+    source_taylor_order: 30
+    source_cep_order: 29
+    filter_taylor_order: 40
+    filter_cep_order: 199
+    prenet_a:
+      kernel_size: 3
+      layers: 30
+      stacks: 3
+      residual_channels: 32
+      gate_channels: 64
+      skip_channels: 32
+      aux_context_window: 2
+      dropout: 0.0
+      bias: True
+      use_weight_norm: True
+      use_causal_conv: False
+      upsample_scales: [4, 4, 4, 4]
+    prenet_p:
+      kernel_size: 3
+      layers: 30
+      stacks: 3
+      residual_channels: 32
+      gate_channels: 64
+      skip_channels: 32
+      aux_context_window: 2
+      dropout: 0.0
+      bias: True
+      use_weight_norm: True
+      use_causal_conv: False
+      upsample_scales: [4, 4, 4, 4]
+    mode: "freq-domain"
+  discriminator_type: null
+  discriminator_periods: null
+
+train:
+  optimizer:
+    betas: [ 0.9, 0.99 ]
+    lr: 0.0002
+    lr_decay: 0.999
+    eps: 0.000000001
+    weight_decay: 0.001
+    warmup_epoch: 10
+    multiplier: 8.0
+  interval:
+    log_step: 100
+    val_step: 1000
+    save_epoch: 50
+  epochs: 1000
+  batch_size: 16
+  batch_max_len: 1000
+  segment_size: 70
+  seed: 1234
+  log_dir: "./logs/JVS100_MLSA_24K"
+  fp16_run: True
+
+loss:
+  multi_stft_loss:
+    fft_sizes: [1024, 2048, 512]
+    hop_sizes: [120, 240, 50]
+    win_lengths: [600, 1200, 240]
+    window: "hann_window"
+  lambda_feat: 0.05
+  fm_loss: 1.0
+  disc_loss: 1.0
+  adv_loss: 1.0
+

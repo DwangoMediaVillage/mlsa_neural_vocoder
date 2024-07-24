@@ -1,0 +1,1 @@
+nohup tensorboard --logdir logs/ --bind_all --port 6006 > /dev/null &
