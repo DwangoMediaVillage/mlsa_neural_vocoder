@@ -1,6 +1,6 @@
 # MLSA Neural Vocoder
 
-[この記事](https://dmw.nico/ja/articles/intern_ashida)のMLSAニューラルボコーダーの学習コードです。
+[この記事](https://dmv.nico/ja/articles/intern_ashida/)のMLSAニューラルボコーダーの学習コードです。
 
 ## 使い方
 
